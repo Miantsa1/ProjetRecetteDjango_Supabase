@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1 class="text-center display-4 mb-4">Liste des commandes</h1>
+
+    <div class="mb-3 text-end">
+        <a href="{% url 'commandes:create_commande' %}" class="btn btn-success">Ajouter une commande</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Personne</th>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
+                <tr>
+                    <td>{{ commande.personne }}</td>
+                    <td>{{ commande.produit }}</td>
+                    <td>{{ commande.quantite }}</td>
+                    <td>{{ commande.date_commande|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'commandes:commandeUpdate' commande.id %}" class="btn btn-sm btn-primary me-2">Modifier</a>
+                        <form action="{% url 'commandes:commandeDelete' commande.id %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Aucune commande enregistrée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
